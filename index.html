@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quer Namorar Comigo? ❤️</title>
+    <!-- Confetti Library -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #ffe6e9 0%, #fecdd3 50%, #fda4af 100%);
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Corações Caindo de Fundo */
+        .heart-bg {
+            position: absolute;
+            top: -20px;
+            color: rgba(244, 63, 94, 0.3);
+            font-size: 20px;
+            animation: fall linear infinite;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(105vh) rotate(360deg);
+            }
+        }
+
+        /* Cartão Principal */
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 2.5rem 2rem;
+            border-radius: 24px;
+            box-shadow: 0 20px 40px rgba(225, 29, 72, 0.15);
+            text-align: center;
+            max-width: 420px;
+            width: 90%;
+            z-index: 10;
+            position: relative;
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.8);
+        }
+
+        .img-container {
+            width: 140px;
+            height: 140px;
+            margin: 0 auto 1.5rem;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 4px solid #f43f5e;
+            box-shadow: 0 8px 16px rgba(244, 63, 94, 0.2);
+        }
+
+        .img-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        h1 {
+            color: #be123c;
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        p.subtitle {
+            color: #64748b;
+            font-size: 0.95rem;
+            margin-bottom: 2rem;
+        }
+
+        /* Botões */
+        .btn-container {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            align-items: center;
+            min-height: 60px;
+        }
+
+        .btn {
+            padding: 12px 28px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            outline: none;
+        }
+
+        .btn-sim {
+            background: linear-gradient(135deg, #f43f5e, #e11d48);
+            color: white;
+            box-shadow: 0 4px 15px rgba(225, 29, 72, 0.4);
+            animation: pulse 2s infinite;
+        }
+
+        .btn-sim:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(225, 29, 72, 0.6);
+        }
+
+        .btn-nao {
+            background-color: #f1f5f9;
+            color: #64748b;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            position: absolute;
+            transition: all 0.15s ease-out;
+            z-index: 100;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .hint {
+            font-size: 0.8rem;
+            color: #94a3b8;
+            margin-top: 10px;
+            min-height: 18px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Cartão Principal -->
+    <div class="card">
+        <div class="img-container">
+            <img src="Imagem do WhatsApp de 2024-11-07 à(s) 09.06.49_6.JPG" alt="Corações">
+        </div>
+        <h1>Quer namorar comigo?</h1>
+        <p class="subtitle">Prometo te fazer a pessoa mais feliz do mundo! ❤️</p>
+        
+        <div class="btn-container">
+            <button class="btn btn-sim" id="btnSim" onclick="aceitou()">SIM! 🥰</button>
+            <button class="btn btn-nao" id="btnNao">Não 😜</button>
+        </div>
+        <p class="hint" id="dicaText"></p>
+    </div>
+
+    <script>
+        // ⚠️ COLOQUE SEU NÚMERO AQUI (Com 55 + DDD + Seu Número)
+        const SEU_NUMERO_WHATSAPP = "38997280828"; 
+        
+        // Mensagem padrão que vai aparecer pronta no WhatsApp
+        const MENSAGEM = encodeURIComponent("Eu aceito namorar com você! ❤️🥰✨");
+
+        // Criar Corações Caindo no Fundo
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart-bg');
+            heart.innerHTML = '❤️';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = Math.random() * 3 + 2 + 's';
+            heart.style.fontSize = Math.random() * 15 + 10 + 'px';
+            document.body.appendChild(heart);
+
+            setTimeout(() => {
+                heart.remove();
+            }, 5000);
+        }
+        setInterval(createHeart, 300);
+
+        // Lógica do Botão Não Fujão
+        const btnNao = document.getElementById('btnNao');
+        const btnSim = document.getElementById('btnSim');
+        const dicaText = document.getElementById('dicaText');
+
+        const mensagens = [
+            "Ops, errou o botão!",
+            "Eita, tá rápido demais?",
+            "Certeza disso?",
+            "Tenta de novo! 😜",
+            "Acho que você quis dizer SIM!",
+            "Nem vem! Hahaha"
+        ];
+
+        let simScale = 1;
+
+        function moverBotaoNao() {
+            const maxX = window.innerWidth - btnNao.offsetWidth - 20;
+            const maxY = window.innerHeight - btnNao.offsetHeight - 20;
+
+            const newX = Math.max(20, Math.floor(Math.random() * maxX));
+            const newY = Math.max(20, Math.floor(Math.random() * maxY));
+
+            btnNao.style.position = 'fixed';
+            btnNao.style.left = `${newX}px`;
+            btnNao.style.top = `${newY}px`;
+
+            const randomMsg = mensagens[Math.floor(Math.random() * mensagens.length)];
+            dicaText.innerText = randomMsg;
+
+            simScale += 0.05;
+            btnSim.style.transform = `scale(${simScale})`;
+        }
+
+        btnNao.addEventListener('mouseover', moverBotaoNao);
+        btnNao.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            moverBotaoNao();
+        });
+
+        // Quando clica no SIM: dispara confetes e abre o WhatsApp imediatamente
+        function aceitou() {
+            // Dispara a animação de confetes
+            confetti({
+                particleCount: 100,
+                spread: 70,
+                origin: { y: 0.6 },
+                colors: ['#f43f5e', '#be123c', '#ffffff']
+            });
+
+            // Redireciona para o WhatsApp após 800 milissegundos (dá tempo de ver os confetes)
+            setTimeout(() => {
+                window.location.href = `https://wa.me/${SEU_NUMERO_WHATSAPP}?text=${MENSAGEM}`;
+            }, 800);
+        }
+    </script>
+</body>
+</html>
